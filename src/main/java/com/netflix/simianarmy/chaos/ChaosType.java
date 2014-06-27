@@ -22,7 +22,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.netflix.simianarmy.CloudClient;
 import com.netflix.simianarmy.MonkeyConfiguration;
 
 /**
@@ -136,12 +135,6 @@ public abstract class ChaosType {
      * @return true iff root is on EBS
      */
     protected boolean isRootVolumeEbs(ChaosInstance instance) {
-        CloudClient cloudClient = instance.getCloudClient();
-        String instanceId = instance.getInstanceId();
-
-        List<String> withRoot = cloudClient.listAttachedVolumes(instanceId, true);
-        List<String> withoutRoot = cloudClient.listAttachedVolumes(instanceId, false);
-
-        return (withRoot.size() != withoutRoot.size());
+    	return false;
     }
 }

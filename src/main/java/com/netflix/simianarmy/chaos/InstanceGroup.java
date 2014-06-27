@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2013 Justin Santa Barbara.
+ *  Copyright 2012 Netflix, Inc.
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -17,20 +17,32 @@
  */
 package com.netflix.simianarmy.chaos;
 
-import com.netflix.simianarmy.MonkeyConfiguration;
-
+import java.util.List;
 /**
- * Introduces network latency using traffic-shaping.
+ * The Interface InstanceGroup.
  */
-public class NetworkLatencyChaosType extends ScriptChaosType {
-    /**
-     * Constructor.
-     *
-     * @param config
-     *            Configuration to use
-     * @throws IOException
-     */
-    public NetworkLatencyChaosType(MonkeyConfiguration config) {
-        super(config, "NetworkLatency");
-    }
+public interface InstanceGroup {
+
+	/**
+	 * Name.
+	 *
+	 * @return the group string
+	 */
+	String name();
+
+	/**
+	 * environment.
+	 *
+	 * @return the environment the group exists in
+	 */
+	String environment();
+
+	/**
+	 * Instances.
+	 *
+	 * @return the list of instances
+	 */
+	List<String> instances();
+	
 }
+

@@ -17,15 +17,10 @@
  */
 package com.netflix.simianarmy.basic;
 
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.netflix.simianarmy.MonkeyConfiguration;
-import com.netflix.simianarmy.basic.chaos.BasicChaosEmailNotifier;
 import com.netflix.simianarmy.basic.chaos.BasicChaosInstanceSelector;
-import com.netflix.simianarmy.chaos.ChaosCrawler;
-import com.netflix.simianarmy.chaos.ChaosEmailNotifier;
-import com.netflix.simianarmy.chaos.ChaosInstanceSelector;
 import com.netflix.simianarmy.chaos.ChaosMonkey;
-import com.netflix.simianarmy.client.aws.chaos.ASGChaosCrawler;
+import com.netflix.simianarmy.chaos.InstanceGroup;
 
 /**
  * The Class BasicContext. This provide the basic context needed for the Chaos Monkey to run. It will configure
@@ -35,30 +30,32 @@ import com.netflix.simianarmy.client.aws.chaos.ASGChaosCrawler;
 public class BasicChaosMonkeyContext extends BasicSimianArmyContext implements ChaosMonkey.Context {
 
     /** The crawler. */
-    private ChaosCrawler crawler;
+    //private ChaosCrawler crawler;
+	
+	private InstanceGroup instanceGroup;
 
     /** The selector. */
-    private ChaosInstanceSelector selector;
+    private BasicChaosInstanceSelector selector;
 
     /** The chaos email notifier. */
-    private ChaosEmailNotifier chaosEmailNotifier;
+    //private ChaosEmailNotifier chaosEmailNotifier;
 
     /**
      * Instantiates a new basic context.
      */
     public BasicChaosMonkeyContext() {
         super("simianarmy.properties", "client.properties", "chaos.properties");
-        setChaosCrawler(new ASGChaosCrawler(awsClient()));
+        //setChaosCrawler(new ASGChaosCrawler(awsClient()));
         setChaosInstanceSelector(new BasicChaosInstanceSelector());
         MonkeyConfiguration cfg = configuration();
-        setChaosEmailNotifier(new BasicChaosEmailNotifier(cfg, new AmazonSimpleEmailServiceClient(), null));
+        //setChaosEmailNotifier(new BasicChaosEmailNotifier(cfg, new AmazonSimpleEmailServiceClient(), null));
     }
 
     /** {@inheritDoc} */
-    @Override
-    public ChaosCrawler chaosCrawler() {
-        return crawler;
-    }
+//    @Override
+//    public ChaosCrawler chaosCrawler() {
+//        return crawler;
+//    }
 
     /**
      * Sets the chaos crawler.
@@ -66,13 +63,13 @@ public class BasicChaosMonkeyContext extends BasicSimianArmyContext implements C
      * @param chaosCrawler
      *            the new chaos crawler
      */
-    protected void setChaosCrawler(ChaosCrawler chaosCrawler) {
-        this.crawler = chaosCrawler;
-    }
+//    protected void setChaosCrawler(ChaosCrawler chaosCrawler) {
+//        this.crawler = chaosCrawler;
+//    }
 
     /** {@inheritDoc} */
     @Override
-    public ChaosInstanceSelector chaosInstanceSelector() {
+    public BasicChaosInstanceSelector chaosInstanceSelector() {
         return selector;
     }
 
@@ -82,14 +79,28 @@ public class BasicChaosMonkeyContext extends BasicSimianArmyContext implements C
      * @param chaosInstanceSelector
      *            the new chaos instance selector
      */
-    protected void setChaosInstanceSelector(ChaosInstanceSelector chaosInstanceSelector) {
+    protected void setChaosInstanceSelector(BasicChaosInstanceSelector chaosInstanceSelector) {
         this.selector = chaosInstanceSelector;
     }
 
-    @Override
-    public ChaosEmailNotifier chaosEmailNotifier() {
-        return chaosEmailNotifier;
-    }
+	public InstanceGroup getInstanceGroup() {
+		return instanceGroup;
+	}
+
+	public void setInstanceGroup(InstanceGroup instanceGroup) {
+		this.instanceGroup = instanceGroup;
+	}
+
+	@Override
+	public InstanceGroup getInstanceGRoup() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//    @Override
+//    public ChaosEmailNotifier chaosEmailNotifier() {
+//        return chaosEmailNotifier;
+//    }
 
     /**
      * Sets the chaos email notifier.
@@ -97,7 +108,7 @@ public class BasicChaosMonkeyContext extends BasicSimianArmyContext implements C
      * @param notifier
      *            the chaos email notifier
      */
-    protected void setChaosEmailNotifier(ChaosEmailNotifier notifier) {
-        this.chaosEmailNotifier = notifier;
-    }
+//    protected void setChaosEmailNotifier(ChaosEmailNotifier notifier) {
+//        this.chaosEmailNotifier = notifier;
+//    }
 }

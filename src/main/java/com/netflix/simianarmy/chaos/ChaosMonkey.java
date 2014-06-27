@@ -17,21 +17,18 @@
  */
 package com.netflix.simianarmy.chaos;
 
-import java.util.Date;
-import java.util.List;
-
-import com.netflix.simianarmy.EventType;
 import com.netflix.simianarmy.FeatureNotEnabledException;
 import com.netflix.simianarmy.InstanceGroupNotFoundException;
 import com.netflix.simianarmy.Monkey;
 import com.netflix.simianarmy.MonkeyConfiguration;
-import com.netflix.simianarmy.MonkeyRecorder.Event;
-import com.netflix.simianarmy.MonkeyType;
+import com.netflix.simianarmy.basic.chaos.BasicChaosInstanceSelector;
 
 /**
  * The Class ChaosMonkey.
  */
 public abstract class ChaosMonkey extends Monkey {
+	
+	private static final String MONKEY_NAME = "Chaos_Monkey";
 
     /**
      * The Interface Context.
@@ -45,26 +42,30 @@ public abstract class ChaosMonkey extends Monkey {
          */
         MonkeyConfiguration configuration();
 
-        /**
-         * Chaos crawler.
-         *
-         * @return the chaos crawler
-         */
-        ChaosCrawler chaosCrawler();
+//        /**
+//         * Chaos crawler.
+//         *
+//         * @return the chaos crawler
+//         */
+        //We don't need to crawl
+//        ChaosCrawler chaosCrawler();
 
         /**
          * Chaos instance selector.
          *
          * @return the chaos instance selector
          */
-        ChaosInstanceSelector chaosInstanceSelector();
+        BasicChaosInstanceSelector chaosInstanceSelector();
+
+		InstanceGroup getInstanceGRoup();
 
         /**
          * Chaos email notifier.
          *
          * @return the chaos email notifier
          */
-        ChaosEmailNotifier chaosEmailNotifier();
+       //TODO Add notification back later 
+        //ChaosEmailNotifier chaosEmailNotifier();
     }
 
     /** The context. */
@@ -77,33 +78,11 @@ public abstract class ChaosMonkey extends Monkey {
      *            the context.
      */
     public ChaosMonkey(Context ctx) {
-        super(ctx);
+        super(ctx, MONKEY_NAME);
         this.ctx = ctx;
     }
 
-    /**
-     * The monkey Type.
-     */
-    public enum Type implements MonkeyType {
 
-        /** chaos monkey. */
-        CHAOS
-    }
-
-    /**
-     * The event types that this monkey causes.
-     */
-    public enum EventTypes implements EventType {
-
-        /** The chaos termination. */
-        CHAOS_TERMINATION, CHAOS_TERMINATION_SKIPPED
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public final Type type() {
-        return Type.CHAOS;
-    }
 
     /** {@inheritDoc} */
     @Override
@@ -115,29 +94,7 @@ public abstract class ChaosMonkey extends Monkey {
     @Override
     public abstract void doMonkeyBusiness();
 
-    /**
-     * Gets the count of terminations since a specific time. Chaos should probably not continue to beat up an instance
-     * group if the count exceeds a threshold.
-     *
-     * @param group
-     *            the group
-     * @return true, if successful
-     */
-    public abstract int getPreviousTerminationCount(ChaosCrawler.InstanceGroup group, Date after);
-
-    /**
-     * Record termination. This is used to notify system owners of terminations and to record terminations so that Chaos
-     * does not continue to thrash the instance groups on later runs.
-     *
-     * @param group
-     *            the group
-     * @param instance
-     *            the instance
-     * @return the termination event
-     */
-    public abstract Event recordTermination(ChaosCrawler.InstanceGroup group, String instance, ChaosType chaosType);
-
-    /**
+     /**
      * Terminates one instance right away from an instance group when there are available instances.
      * @param type
      *            the type of the instance group
@@ -147,24 +104,7 @@ public abstract class ChaosMonkey extends Monkey {
      * @throws FeatureNotEnabledException
      * @throws InstanceGroupNotFoundException
      */
-    public abstract Event terminateNow(String type, String name, ChaosType chaosType)
+    public abstract void terminateNow(String type, String name, ChaosType chaosType)
             throws FeatureNotEnabledException, InstanceGroupNotFoundException;
 
-    /**
-     * Sends notification for the termination to the instance owners.
-     *
-     * @param group
-     *            the group
-     * @param instance
-     *            the instance
-     * @param chaosType
-     *            the chaos monkey strategy that was chosen
-     */
-    public abstract void sendTerminationNotification(ChaosCrawler.InstanceGroup group, String instance,
-            ChaosType chaosType);
-
-    /**
-     * Gets a list of all enabled chaos types for this ChaosMonkey.
-     */
-    public abstract List<ChaosType> getChaosTypes();
 }

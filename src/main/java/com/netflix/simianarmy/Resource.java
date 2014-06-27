@@ -69,14 +69,14 @@ public interface Resource {
      *
      * @return the resource type enum
      */
-    ResourceType getResourceType();
+    //ResourceType getResourceType();
 
     /**
      * Sets the resource type.
      *
      * @param type the resource type enum
      */
-    void setResourceType(ResourceType type);
+    //void setResourceType(ResourceType type);
 
     /**
      * Sets the resource type and returns the resource.
@@ -84,7 +84,7 @@ public interface Resource {
      * @param type resource type enum
      * @return the resource object
      */
-    Resource withResourceType(ResourceType type);
+    //Resource withResourceType(ResourceType type);
 
     /**
      * Gets the region the resource is in.

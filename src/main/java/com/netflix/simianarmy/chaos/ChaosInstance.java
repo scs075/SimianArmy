@@ -22,8 +22,6 @@ import org.jclouds.ssh.SshClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.netflix.simianarmy.CloudClient;
-
 /**
  * Wrapper around an instance on which we are going to cause chaos.
  */
@@ -31,7 +29,6 @@ public class ChaosInstance {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ChaosInstance.class);
 
-    private final CloudClient cloudClient;
     private final String instanceId;
     private final SshConfig sshConfig;
 
@@ -45,8 +42,7 @@ public class ChaosInstance {
      * @param sshConfig
      *            SSH configuration to access instance
      */
-    public ChaosInstance(CloudClient cloudClient, String instanceId, SshConfig sshConfig) {
-        this.cloudClient = cloudClient;
+    public ChaosInstance( String instanceId, SshConfig sshConfig) {
         this.instanceId = instanceId;
         this.sshConfig = sshConfig;
     }
@@ -58,15 +54,6 @@ public class ChaosInstance {
      */
     public SshConfig getSshConfig() {
         return sshConfig;
-    }
-
-    /**
-     * Gets the {@link CloudClient} used to access the cloud.
-     *
-     * @return the {@link CloudClient}
-     */
-    public CloudClient getCloudClient() {
-        return cloudClient;
     }
 
     /**
@@ -120,7 +107,7 @@ public class ChaosInstance {
         }
 
         LoginCredentials credentials = sshConfig.getCredentials();
-        SshClient ssh = cloudClient.connectSsh(instanceId, credentials);
+        SshClient ssh = null; //cloudClient.connectSsh(instanceId, credentials);
 
         return ssh;
     }

@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -53,18 +52,8 @@ public enum MonkeyRunner {
      */
     public void start() {
         for (Monkey monkey : monkeys) {
-            LOGGER.info("Starting " + monkey.type().name() + " Monkey");
-            monkey.start();
-        }
-    }
-
-    /**
-     * Stop all of the registered monkeys.
-     */
-    public void stop() {
-        for (Monkey monkey : monkeys) {
-            LOGGER.info("Stopping " + monkey.type().name() + " Monkey");
-            monkey.stop();
+            LOGGER.info("Starting " + monkey.getName() + " Monkey");
+            monkey.doMonkeyBusiness();
         }
     }
 
@@ -98,16 +87,6 @@ public enum MonkeyRunner {
     }
 
     /**
-     * Replace a simple monkey that has void constructor.
-     *
-     * @param monkeyClass
-     *            the monkey class
-     */
-    public void replaceMonkey(Class<? extends Monkey> monkeyClass) {
-        replaceMonkey(monkeyClass, null);
-    }
-
-    /**
      * Adds the monkey.
      *
      * @param monkeyClass
@@ -122,47 +101,6 @@ public enum MonkeyRunner {
         }
         monkeyMap.put(monkeyClass, ctxClass);
         monkeys.add(factory(monkeyClass, ctxClass));
-    }
-
-    /**
-     * Replace monkey. If a monkey is already registered this will replace that registered monkey.
-     *
-     * @param monkeyClass
-     *            the monkey class
-     * @param ctxClass
-     *            the context class that is passed to the monkey class constructor.
-     */
-    public void replaceMonkey(Class<? extends Monkey> monkeyClass, Class<? extends Monkey.Context> ctxClass) {
-        monkeyMap.put(monkeyClass, ctxClass);
-        ListIterator<Monkey> li = monkeys.listIterator();
-        while (li.hasNext()) {
-            Monkey monkey = li.next();
-            if (monkey.getClass() == monkeyClass) {
-                li.set(factory(monkeyClass, ctxClass));
-                return;
-            }
-        }
-        Monkey monkey = factory(monkeyClass, ctxClass);
-        monkeys.add(monkey);
-    }
-
-    /**
-     * Removes the monkey. factory() will no longer be able to construct monkeys of the specified monkey class.
-     *
-     * @param monkeyClass
-     *            the monkey class
-     */
-    public void removeMonkey(Class<? extends Monkey> monkeyClass) {
-        ListIterator<Monkey> li = monkeys.listIterator();
-        while (li.hasNext()) {
-            Monkey monkey = li.next();
-            if (monkey.getClass() == monkeyClass) {
-                monkey.stop();
-                li.remove();
-                break;
-            }
-        }
-        monkeyMap.remove(monkeyClass);
     }
 
     /**

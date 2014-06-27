@@ -21,22 +21,18 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.netflix.simianarmy.GroupType;
-import com.netflix.simianarmy.chaos.ChaosCrawler.InstanceGroup;
+import com.netflix.simianarmy.chaos.InstanceGroup;
 
 /**
  * The Class BasicInstanceGroup.
  */
 public class BasicInstanceGroup implements InstanceGroup {
 
-    /** The name. */
-    private final String name;
+    /** The api name. */
+    private final String apiName;
 
-    /** The type. */
-    private final GroupType type;
-
-    /** The region. */
-    private final String region;
+     /** The region. */
+    private final String environment;
 
     /**
      * Instantiates a new basic instance group.
@@ -46,25 +42,19 @@ public class BasicInstanceGroup implements InstanceGroup {
      * @param type
      *            the type
      */
-    public BasicInstanceGroup(String name, GroupType type, String region) {
-        this.name = name;
-        this.type = type;
-        this.region = region;
-    }
-
-    /** {@inheritDoc} */
-    public GroupType type() {
-        return type;
+    public BasicInstanceGroup(String apiName, String environment) {
+        this.apiName = apiName;
+        this.environment = environment;
     }
 
     /** {@inheritDoc} */
     public String name() {
-        return name;
+        return apiName;
     }
 
     /** {@inheritDoc} */
-    public String region() {
-        return region;
+    public String environment() {
+        return environment;
     }
 
     /** The list. */
@@ -76,19 +66,4 @@ public class BasicInstanceGroup implements InstanceGroup {
         return Collections.unmodifiableList(list);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void addInstance(String instance) {
-        list.add(instance);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public BasicInstanceGroup copyAs(String newName) {
-        BasicInstanceGroup newGroup = new BasicInstanceGroup(newName, this.type(), this.region());
-        for (String instance: this.instances()) {
-            newGroup.addInstance(instance);
-        }
-        return newGroup;
-    }
 }

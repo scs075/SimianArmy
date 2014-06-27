@@ -22,18 +22,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.netflix.simianarmy.chaos.ChaosCrawler.InstanceGroup;
-import com.netflix.simianarmy.chaos.ChaosInstanceSelector;
+import com.google.common.collect.Lists;
+import com.netflix.simianarmy.chaos.InstanceGroup;
 
 /**
  * The Class BasicChaosInstanceSelector.
  */
-public class BasicChaosInstanceSelector implements ChaosInstanceSelector {
+public class BasicChaosInstanceSelector {
 
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(BasicChaosInstanceSelector.class);
@@ -50,7 +49,6 @@ public class BasicChaosInstanceSelector implements ChaosInstanceSelector {
     }
 
     /** {@inheritDoc} */
-    @Override
     public Collection<String> select(InstanceGroup group, double probability) {
         int n = ((int) probability);
         String selected = selectOneInstance(group, probability - n);
@@ -81,13 +79,13 @@ public class BasicChaosInstanceSelector implements ChaosInstanceSelector {
         Validate.isTrue(probability < 1);
         if (probability <= 0) {
             logger().info("Group {} [type {}] has disabled probability: {}",
-                    new Object[] {group.name(), group.type(), probability});
+                    new Object[] {group.name(), group.environment(), probability});
             return null;
         }
         double rand = Math.random();
         if (rand > probability || group.instances().isEmpty()) {
             logger().info("Group {} [type {}] got lucky: {} > {}",
-                    new Object[] {group.name(), group.type(), rand, probability});
+                    new Object[] {group.name(), group.environment(), rand, probability});
             return null;
         }
         return group.instances().get(RANDOM.nextInt(group.instances().size()));
