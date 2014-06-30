@@ -2,6 +2,8 @@
 ext.githubProjectName = 'SimianArmy'
 group = "com.netflix.${project.name}"
 apply plugin:'eclipse-wtp'
+apply plugin: 'groovy'
+
 
 buildscript {
     repositories {
@@ -30,12 +32,6 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 dependencies {
-    // for the VMWareClient
-    compile 'com.cloudbees.thirdparty:vijava:5.0.0'
-    compile 'dom4j:dom4j:1.6.1'
-
-    // for DB support outside of AWS (SimpleDB not available)
-    compile 'org.mapdb:mapdb:latest.release'
 
     compile 'javax.ws.rs:jsr311-api:1.1.1'
     compile 'com.sun.jersey:jersey-core:1.11'
@@ -45,7 +41,6 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
     compile 'com.netflix.eureka:eureka-client:1.1.22'
-    compile 'com.amazonaws:aws-java-sdk:latest.release'
     compile 'commons-lang:commons-lang:2.6'
     compile 'joda-time:joda-time:2.0'
     compile 'com.google.guava:guava:11.+'
@@ -57,7 +52,9 @@ dependencies {
 
     testCompile 'org.testng:testng:6.3.1'
     testCompile 'org.mockito:mockito-core:1.8.5'
-
+	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+	testCompile 'org.spockframework:spock-spring:0.7-groovy-2.0'
+	
     runtime 'org.slf4j:slf4j-log4j12:1.6.1'
 
     providedCompile 'javax.servlet:servlet-api:2.5'
@@ -65,13 +62,7 @@ dependencies {
     providedCompile 'com.google.code.findbugs:jsr305:1.3.9'
 }
 
-test {
-    useTestNG()
-}
 
-tasks.withType(Compile) {
-    options.compilerArgs << "-Xlint" << "-Werror"
-}
 
 artifacts {
     archives tasks.jar
